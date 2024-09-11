@@ -1,1 +1,1 @@
-print(True == 0)
+AGE = 19
