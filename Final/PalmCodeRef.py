@@ -86,7 +86,7 @@ def welcome() -> None:
 
 def quit() -> None:
     os.system(CLEAR_SCREEN)
-    print(r"""
+    print(r"""y
  _____ _   _    _    _   _ _  __ __   _____  _   _ _ _ _
 |_   _| | | |  / \  | \ | | |/ / \ \ / / _ \| | | | | | |
   | | | |_| | / _ \ |  \| | ' /   \ V / | | | | | | | | |

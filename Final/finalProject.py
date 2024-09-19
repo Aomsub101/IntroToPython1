@@ -5,7 +5,7 @@
    # Welcome
 
    # Login --> Have to have an account --> name@harbour.com --> gaining access
-   
+
    # Auth system
 
    # Inventory --> Show inventory
@@ -25,6 +25,14 @@
 
 # For window and unix users
 
+# Database idea:
+    # Dictionary
+    # JSON
+    # List
+
+# Encryption idea:
+    # Hashing
+    # 
 ##################################################################################################
 
 import os
@@ -33,6 +41,24 @@ import os
 USER_OS = ""
 CLEAR_SCREEN = ""
 
+# Database mocking
+## Inventory
+inventory = {
+    1: "Scissors",
+    2: "Pencil",
+    3: "Microphone",
+    4: "Batteries",
+}
+## amount of the stuff in the inventory
+inventory_amount = {
+    1: 5,
+    2: 20,
+    3: 3,
+    4: 15,
+}
+
+# accessable users
+accessible = ["@harbour", "@utcc"]
 
 def check_user_system():
     global USER_OS
@@ -48,7 +74,12 @@ def check_user_system():
         CLEAR_SCREEN = "clear"
 
 def welcome():
+    os.system(CLEAR_SCREEN)
     print(r"""
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
                                           +++++++++++++***                                 %%%%%    
                                        ++==+============+++**                    %%%%%%%%%%%%%%%%%%%
                                     +======================+++*#          %%%%%%##########%%%%%%%%%#
@@ -75,8 +106,7 @@ def welcome():
     %%%%%%%@##############%%%%%%%%%%%%%%                                                            
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                                                                 
     #%%%%%%%%%%%%%%%%%%%%%%%%                                                                       
-     %#%%%%%%%%%%#%%%                        
-
+     %#%%%%%%%%%%#%%%                                                                               
                              _   _            _                          
                             | | | | __ _ _ __| |__   ___  _   _ _ __     
                             | |_| |/ _` | '__| '_ \ / _ \| | | | '__|    
@@ -88,7 +118,24 @@ def welcome():
                             |_____\___|_| |_|\__,_|_|_| |_|\__, |        
                                                            |___/                                                                
 """)
-    pass
+    
+    print(r"""
+        What is your purpose here?
+                (L)ending items
+                (R)eturning items
+                (N)othing just chilling around
+    """)
+    choice = input("Select your choice: ").lower()
+    while choice not in ['l', 'r', 'n']:
+        print("Please choose the appropriate choice")
+        choice = input().lower()
+    
+    if choice == 'l':
+        lending()
+    elif choice == 'r':
+        returning()
+    else:
+        exit()
 
 def login():
     pass
@@ -99,9 +146,22 @@ def create_account():
 def lending():
     pass
 
-def return_stuff():
+def returning():
     pass
 
+def exit():
+    os.system(CLEAR_SCREEN)
+    print(r"""
+        //////////////////////////////////////////////////////////////////////////////////
+        //  ████████╗██╗  ██╗ █████╗ ███╗   ██╗██╗  ██╗    ██╗   ██╗ ██████╗ ██╗   ██╗  //
+        //  ╚══██╔══╝██║  ██║██╔══██╗████╗  ██║██║ ██╔╝    ╚██╗ ██╔╝██╔═══██╗██║   ██║  //
+        //     ██║   ███████║███████║██╔██╗ ██║█████╔╝      ╚████╔╝ ██║   ██║██║   ██║  //
+        //     ██║   ██╔══██║██╔══██║██║╚██╗██║██╔═██╗       ╚██╔╝  ██║   ██║██║   ██║  //
+        //     ██║   ██║  ██║██║  ██║██║ ╚████║██║  ██╗       ██║   ╚██████╔╝╚██████╔╝  //
+        //     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝       ╚═╝    ╚═════╝  ╚═════╝   //
+        //////////////////////////////////////////////////////////////////////////////////
+    """)
+    pass
 def inventory():
     pass
 
