@@ -3,7 +3,7 @@
     {
       "id": 1,
       "name": "scissors",
-      "amount": 160
+      "amount": 100
     },
     {
       "id": 2,
@@ -13,12 +13,12 @@
     {
       "id": 3,
       "name": "microphones",
-      "amount": 50
+      "amount": 15
     },
     {
       "id": 4,
       "name": "batteries",
-      "amount": 50
+      "amount": 25
     }
   ]
 }

@@ -39,6 +39,14 @@ import os
 import json
 import getpass as g
 
+#global variable
+user_name = ''
+is_login = False
+user_id = None
+
+user = {}
+inventory = {}
+
 # Change directory to testing
 os.chdir("C:\\Users\\ASUS\\Downloads\\Python\\finalworkspace\\testing")
 
@@ -53,12 +61,6 @@ with open('user.json', 'r', encoding='utf-8') as user_file:
 # user system
 USER_OS = ""
 CLEAR_SCREEN = ""
-
-#global variable
-user_name = ''
-is_login = False
-user_id = None
-
 
 # accessable users
 accessible = ["@harbour", "@utcc"]
@@ -196,47 +198,57 @@ def login():
     global user_name
     global is_login
     global user_id
+
     def get_user_id(user_name):
-        for user in user['users']:
-            if user['user_name'] == user_name:
-                return user['key']
+        for usr in user['users']:
+            if usr['user_name'] == user_name:
+                return usr['id'] - 1
 
-    user_name = input("Please enter your user name: ")
-    if any(user['user_name'] == user_name for user in user['users']):
-        user_id = get_user_id(user_name)
-        password = input("Password: ")
-        count = 3
-        while user['users'][user_id]['password'] != password:
-            if count == 0:
-                print("        You run out of retry quota!        ")
-                print("      You will be at Login page again     ")
-                input("------   Press any key to continue   ------")
-                break
-            count -= 1
-            if count > 1:
-                print(f"WRONG!\nYou have {count} tries left")
-            else:
-                print(f"WRONG!\nYou have 1 try left")
+    user_name = input("\nPlease enter your user name: ")
 
-            password = input("Please re-enter your password: ")
-            
-        if password == user['users'][user_id]['password']:
-            is_login = True
-        else:
-            return None
-        
-    else:
+    while not (any(each_user['user_name'] == user_name for each_user in user['users'])):
         print(f"There is no {user_name} account registered.")
-        print("Do you want to create a new account? (Y)es (N)o")
+        print("\nDo you want to create a new account? (Y)es (N)o (R)etry")
         choice = input("Enter your choice: ").lower()
         
-        while choice not in ['y', 'n']:
+        while choice not in ['y', 'n', 'r']:
             print("Invalid choice!")
-            choice = input("Enter a valid choice: ")
+            choice = input("\nEnter a valid choice: ")
 
-        if choice == 'l':
+        if choice == 'y':
             create_account()
             os.system(CLEAR_SCREEN)
+            return None
+        elif choice == 'r':
+            user_name = input("\nEnter your user name again: ")
+        else:
+            return None
+    
+    user_id = get_user_id(user_name)
+
+    password_check = user['users'][user_id]['password']
+    password = g.getpass("Password(It will be invisible): ")
+    count = 3
+    while password_check != password:
+        if count == 1:
+            os.system(CLEAR_SCREEN)
+            print(r"""       
+                                                                You run out of retry quota!
+                                                            You will be at Login page again 
+                                                        ------   Press any key to continue   ------     
+            """)
+            input()
+            return None
+        count -= 1
+        if count > 1:
+            print(f"\nWRONG!\nYou have {count} tries left")
+        else:
+            print(f"\nWRONG!\nYou have 1 try left. Don't get it wrong!")
+
+        password = g.getpass("Please re-enter your password: ")
+        
+    is_login = True
+
 
 def create_account():
     os.system(CLEAR_SCREEN)
@@ -259,18 +271,23 @@ def create_account():
                                              ** Please include '@harbour' or '@utcc' in your user name too **
           """)
     
-    user_name = input("\nEnter user name with '@harbour' or '@utcc': ")
+    user_name = input("\nEnter user name with '@harbour' or '@utcc': ").lower()
 
     while '@harbour' not in user_name and '@utcc' not in user_name:
         print("\nPlease include '@harbour' or '@utcc' in your username!")
         user_name = input("Enter your username: ")
     
-    password = g.getpass("\nPlease create a new password: ")
+    while any(usr['user_name'] == user_name for usr in user['users']):
+        print("\nThis account already exists")
+        user_name = input("Please think of a new username: ")
+
+    password = g.getpass("\nPlease create a new password(it will be invisible): ")
 
     new_user = {
-        "user_id": len(user['users']) + 1,
+        "id": len(user['users']) + 1,
         "user_name": user_name,
         "password": password,
+        "items":[]
     }
     user['users'].append(new_user)
 
@@ -291,11 +308,12 @@ def create_account():
                                                 ██║     ██████╔╝█████╗  ███████║   ██║   █████╗  ██║  ██║██║ 
                                                 ██║     ██╔══██╗██╔══╝  ██╔══██║   ██║   ██╔══╝  ██║  ██║╚═╝ 
                                                 ╚██████╗██║  ██║███████╗██║  ██║   ██║   ███████╗██████╔╝██╗ 
-                                                ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝ ╚═╝ 
+                                                 ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝ ╚═╝ 
                                                         
                                                 -----     Press any key to continue to login page     -----
     """)
     input()
+    os.system(CLEAR_SCREEN)
 
 def action():
     os.system(CLEAR_SCREEN)
@@ -311,6 +329,7 @@ def action():
                                                                 What is your purpose here?
                                                                         (L)ending
                                                                         (R)eturning
+                                                                        (A)dd lending item
                                                                         (N)othing just chilling
     """)
     
@@ -324,12 +343,15 @@ def action():
         lending()
     elif choice == 'r':
         returning()
+    elif choice == 'a':
+        add_item()
     else:
         exit()
 
 
 def lending():
     global user_name
+    global is_item_exist
 
     os.system(CLEAR_SCREEN)
     print(r"""
@@ -342,24 +364,49 @@ def lending():
     """)
     
     want_to_lend = True
+    is_item_exist = False
+    
 
     while want_to_lend:
-        global user_inventory
-        global user_item_amount
-        global user_return_date
+        user_items = user['users'][user_id-1]['items']
+        user_item_index = len(user['users'][user_id-1]['items'])
 
-        show_inventory()
-        print("What do you want to lend?")
-        item_id = input("Enter item id: ")
-
-        while item_id not in inventory:
-            print("\nPlease enter an existing item id")
-            item_id = input("Enter item id: ")
+        def get_item_index(item_id):
+            count = 0
+            for item in user_items:
+                if item['id'] == item_id:
+                    return count
+                count += 1
         
-        if item_id not in user_inventory:
-            user_inventory.update({item_id: inventory[item_id]}) 
-  
-        print(f"\nHow many {inventory[item_id]} do you want to lend?")
+        show_inventory()
+
+        print("What do you want to lend?")
+        while True:
+            try:
+                item_id = int(input("Enter item id: "))
+                break            
+            except ValueError:
+                print("\nPlease enter a number!")
+
+        while not any(item['id'] == item_id for item in inventory['items']):
+            print("\nPlease enter an existing item id")
+            while True:
+                try:
+                    item_id = int(input("Enter item id: "))
+                    break                
+                except ValueError:
+                    print("\nPlease enter a number!")
+        
+        if not any(usr_item['id'] == item_id for usr_item in user['users'][user_id-1]['items']):
+            user_items.append({
+                "id": inventory['items'][item_id-1]['id'], 
+                "name": inventory['items'][item_id-1]['name']
+            })
+        else:
+            is_item_exist = True
+            user_item_index = get_item_index(item_id)
+
+        print(f"\nHow many {inventory['items'][item_id-1]['name']} do you want to lend?")
         while True: 
             try:
                 amount = int(input("Enter amount: "))
@@ -367,11 +414,11 @@ def lending():
             except ValueError:
                 print("\nPlease lending the available amount")
 
-        while amount > inventory_amount[item_id] or amount < 0:
+        while amount > inventory['items'][item_id-1]['amount'] or amount < 0:
             if amount < 0:
                 print("Seriously?? negative number?")
             else:    
-                print(f"There are not enough {inventory[item_id]} for you :(")
+                print(f"There are not enough {inventory['items'][item_id-1]['name']} for you :(")
             print("\nPlease lending the available amount")
 
             while True:
@@ -380,14 +427,17 @@ def lending():
                     break
                 except ValueError:
                     print("\nPlease lending the available amount")
-        inventory_amount[item_id] -= amount
 
-        if item_id in user_inventory:
-            user_item_amount[item_id] = 0
-        
-        user_item_amount.update({item_id: amount}) # "scissors" : 2
+        inventory['items'][item_id-1]['amount'] -= amount
+        with open('inventory.json', 'w', encoding='utf-8') as inventory_file:
+            json.dump(inventory, inventory_file, indent=2)
 
-        print(f"\nWhen do you want to returning the {inventory[item_id]}?")
+        if is_item_exist:
+            user_items[user_item_index]['amount'] += amount
+        else:
+            user_items[user_item_index].update({'amount': amount}) # "scissors" : 2
+
+        print(f"\nWhen do you want to return the {inventory['items'][item_id-1]['name']}?")
         
         while True:
             while True:
@@ -398,9 +448,15 @@ def lending():
                     print("\nPlease enter a number!")
             if days < 0:
                 print("\nDONT'T ENTER NEGATIVE NUMBERS!")
+            elif days == 0:
+                print("\nMinimum lending is 1 day.")
             else:
                 break
-        user_return_date.update({item_id: days})
+
+        user_items[user_item_index].update({'days': days})
+
+        with open('user.json', 'w', encoding='utf-8') as user_file:
+            json.dump(user, user_file, indent=2)
 
         print(r"""
                                                                     Anything else?
@@ -417,9 +473,13 @@ def lending():
                                                                         (N)ope
               """)
             choice = input("Enter your choice: ").lower()
+            
+        is_item_exist = False
 
         if choice == 'n':
             want_to_lend = False
+         
+
     os.system(CLEAR_SCREEN)
 
     # Display status
@@ -429,12 +489,18 @@ def lending():
     print(f"{'|':<5}List of lended items")
     print(f"{'|':<5}{'Id'}{'':<2}|{'':<2}{'Item':<15} {'Amount':<10} {'Days till returning'}")
 
-    for ID in user_inventory:
-        item = user_inventory[ID]
-        amount = user_item_amount[ID]        
-        days = user_return_date[ID]
+    for item in user_items:
+        ID = item['id']
+        item_name = item['name']
+        amount = item['amount']        
+        days = item['days']
 
-        print(f"{'|':<5}{ID:<2}{'':<2}|{'':<2}{item:<15} {amount:<10} {days}")
+        print(f"{'|':<5}{ID:<2}{'':<2}|{'':<2}{item_name:<15} {amount:<10} {days}")
+
+    user['users'][user_id-1].update({"items": user_items})
+
+    with open('user.json', 'w', encoding='utf-8') as user_file:
+        json.dump(user, user_file, indent=2)
 
     print(f"{'|'}\n{'|':<5}{'Sign:':<5}{'Aademics team ✅':<15}")
     print('*' * 80)
@@ -454,14 +520,16 @@ def lending():
     action()
 
 def show_inventory():
+    global inventory
     print("\nINVENTORY LIST")
     print(f"{'':<2}{'Id'}{'':<2}|{'':<2}{'Item':<15} {'Amount':<10}")
     print("-" *50)
 
-    for ID in inventory:
-        item = inventory[ID]
-        amount = inventory_amount[ID]
-        print(f"{'':<2}{ID:<2}{'':<2}|{'':<2}{item:<15} {amount:<10}")
+    for itm in inventory['items']:
+        ID = itm['id']
+        item_name = itm['name']
+        amount = itm['amount']
+        print(f"{'':<2}{ID:<2}{'':<2}|{'':<2}{item_name:<15} {amount:<10}")
 
     print("-" * 50)
 
@@ -479,14 +547,24 @@ def returning():
     print("What do you want to return?")
     show_user_inventory()
     print("What item do you want to return?")
-    item_id = input("Enter item id: ")
-
-    while item_id not in user_inventory:
-        if item_id in inventory:
-            print(f"\nYou DID NOT lend {inventory[item_id]}!")
+    while True:
+        try:
+            item_id = int(input("Enter item id: "))
+            break        
+        except ValueError:
+            print("\nPlease enter a number!")
+    
+    while not any(usr_item['id'] == item_id for usr_item in user['users'][user_id-1]['items']):
+        if any(item['id'] == item_id for item in inventory['items']):
+            print(f"\nYou DID NOT lend {inventory['items'][item_id-1]['name']}!")
         else:
             print(f"\nThere is no item with that ID!")
-        item_id = input("Enter item id: ")
+        while True:
+            try:
+                item_id = int(input("Enter item id: "))
+                break            
+            except ValueError:
+                print("\nPlease enter a number!")
 
     print(r"""
                                 Confirm?
@@ -509,12 +587,23 @@ def returning():
                                                         ██║   ██║  ██║██║  ██║██║ ╚████║██║  ██╗███████║██╗
                                                         ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝
                                                          ------    Press any key rro continue    ------
-    """)
-        inventory_amount[item_id] += user_item_amount[item_id]
-        user_inventory.pop(item_id)
-        user_item_amount.pop(item_id)
-        input()
+        """)
+        
+        for usr in user['users'][user_id-1]['items']:
+            if usr['id'] == item_id:
+                inventory['items'][item_id-1]['amount'] += usr['amount']
+                user['users'][user_id-1]['items'].remove(usr)
+                break
+
+        with open('user.json', 'w', encoding='utf-8') as user_file:
+            json.dump(user, user_file, indent=2)
+
+        with open('inventory.json', 'w', encoding='utf-8') as inventory_file:
+            json.dump(inventory, inventory_file, indent=2)
+
+        input() 
         action()
+
     elif choice == 'n':
         print(r"""
                                                                     ██████╗ ██╗   ██╗███████╗
@@ -529,6 +618,20 @@ def returning():
         input()
         action()
 
+def add_item():
+    os.system(CLEAR_SCREEN)
+
+    print(r"""
+                                                     █████╗ ██████╗ ██████╗     ██╗████████╗███████╗███╗   ███╗
+                                                    ██╔══██╗██╔══██╗██╔══██╗    ██║╚══██╔══╝██╔════╝████╗ ████║
+                                                    ███████║██║  ██║██║  ██║    ██║   ██║   █████╗  ██╔████╔██║
+                                                    ██╔══██║██║  ██║██║  ██║    ██║   ██║   ██╔══╝  ██║╚██╔╝██║
+                                                    ██║  ██║██████╔╝██████╔╝    ██║   ██║   ███████╗██║ ╚═╝ ██║
+                                                    ╚═╝  ╚═╝╚═════╝ ╚═════╝     ╚═╝   ╚═╝   ╚══════╝╚═╝     ╚═╝
+
+    """)
+    pass
+
 def show_user_inventory():
     print("\nYOUR INVENTORY\n")
 
@@ -536,11 +639,12 @@ def show_user_inventory():
     print(f"{'':<2}{'Id'}{'':<2}|{'':<2}{'Item':<15} {'Amount':<10}")
     print("-" *50)
 
-    for ID in user_inventory:
-        item = user_inventory[ID]
-        amount = user_item_amount[ID]
+    for usr_item in user['users'][user_id-1]['items']:
+        ID = usr_item['id']
+        item_name = usr_item['name']
+        amount = usr_item['amount']
 
-        print(f"{'':<2}{ID:<2}{'':<2}|{'':<2}{item:<15} {amount:<10}")
+        print(f"{'':<2}{ID:<2}{'':<2}|{'':<2}{item_name:<15} {amount:<10}")
 
     print("-" * 50)
 
