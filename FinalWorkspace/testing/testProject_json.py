@@ -38,11 +38,16 @@
 import os
 import json
 
+# Change directory to testing
+os.chdir("C:\\Users\\ASUS\\Downloads\\Python\\finalworkspace\\testing")
+
 # get inventory
-with open('inventory.json', 'r') as f:
-    data = json.load(f)
+with open('inventory.json', 'r', encoding='utf-8') as inventory_file:
+    inventory = json.load(inventory_file)
 
-
+# get user data
+with open('user.json', 'r', encoding='utf-8') as user_file:
+    user = json.load(user_file)
 
 # user system
 USER_OS = ""
@@ -51,23 +56,6 @@ CLEAR_SCREEN = ""
 #global variable
 user_name = ''
 is_login = False
-
-
-# Database mocking
-## Inventory
-inventory = {
-    "1": "Scissors",
-    "2": "Pencil",
-    "3": "Microphone",
-    "4": "Batteries",
-}
-## amount of the stuff in the inventory
-inventory_amount = {
-    "1": 5,
-    "2": 20,
-    "3": 3,
-    "4": 15,
-}
 
 # accessable users
 accessible = ["@harbour", "@utcc"]
@@ -100,16 +88,23 @@ def welcome():
                                                             ███████╗╚██████╔╝╚██████╔╝██║██║ ╚████║
                                                             ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝
               
-                                        Please login as a harbour or utcc students before lending orr returning items :D
+                                        Please login as a harbour or utcc students before lending or returning items :D
                                         ----------              login with '@harbour' or '@utcc'              ----------
+
+                                                                 (L)ogin with existing account
+                                                                 (C)reate a new account
         """)
+        choice = input("Enter your choice: ").lower()
 
-        user_name = input("Enter your Username: ").lower()
-
-        while ('@harbour' not in user_name) and ('@utcc' not in user_name):
-            print("Access denied!\n")
-            print("Please using '@harbour' or '@utcc' at the end of your username to login")
-            user_name = input("Enter your username again: ")
+        while choice not in ['l', 'c']:
+            print("\nInvalid choice!")
+            choice = input("Enter your choice again: ")
+        
+        if choice == 'l':
+            login()
+        else:
+            create_account()
+    
         is_login = True
 
         os.system(CLEAR_SCREEN)
@@ -196,7 +191,33 @@ def welcome():
     action()
 
 def login():
-    pass
+    global user_name
+
+    def get_user_id(user_name):
+        for user in user['users']:
+            if user['user_name'] == user_name:
+                return user['key']
+
+    user_name = input("Please enter your user name: ")
+    if any(user['user_name'] == user_name for user in user['users']):
+        user_id = get_user_id(user_name)
+        password = input("Password: ")
+        count = 3
+        while user['users'][user_id]['password'] != password:
+            if count <= 0:
+                print("        You run out of retry quota!        ")
+                print("      You will be at welcome page again     ")
+                input("------   Press any key to continue   ------")
+                welcome()
+            count -= 1
+            if count > 1:
+                print(f"WRONG!\nYou have {count} tries left")
+            else:
+                print(f"WRONG!\nYou have {count} try left")
+
+            password = input("Please re-enter your password")
+            
+        
 
 def create_account():
     pass

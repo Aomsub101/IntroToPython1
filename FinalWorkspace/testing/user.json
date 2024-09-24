@@ -1,0 +1,37 @@
+{
+  "users": [
+    {
+      "user_name": "Aomsub",
+      "Key": 1,
+      "items": [
+        {
+          "item_key": 1,
+          "item_name": "scissors",
+          "amount": 20
+        }
+      ]
+    },
+    {
+      "user_name": "Aomsub",
+      "Key": 1,
+      "items": [
+        {
+          "item_key": 1,
+          "item_name": "scissors",
+          "amount": 20
+        }
+      ]
+    },
+    {
+      "user_name": "Aomsub",
+      "Key": 1,
+      "items": [
+        {
+          "item_key": 1,
+          "item_name": "scissors",
+          "amount": 20
+        }
+      ]
+    }
+  ]
+}

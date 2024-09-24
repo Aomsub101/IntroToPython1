@@ -1,24 +1,25 @@
 import json
 import os
 
-CURR_PATH = os.getcwd()
 
-with open("inventory.json", "r") as f:
+os.chdir("C:\\Users\\ASUS\\Downloads\\Python\\finalworkspace\\testing")
+
+with open("inventory.json", "r", encoding='utf-8') as f:
     data = json.load(f)
 
 print(data['items'][0]['id'])
 
 data['items'][0]['amount'] += 10
 
-with open('inventory.json', 'w') as f:
+with open('inventory.json', 'w', encoding='utf-8') as f:
     json.dump(data, f, indent=2)
 
 
-with open('user_inventory.json', 'r') as file:
+with open('user.json', 'r', encoding='utf-8') as file:
     user = json.load(file)
 
 new_user = {
-    "name": "Aomsub",
+    "user_name": "Aomsub",
     "Key": 1,
     "items":[
         {
@@ -31,5 +32,7 @@ new_user = {
 
 user['user'].append(new_user)
 
-with open('user_inventory.json', 'w') as file:
+with open('user.json', 'w', encoding='utf-8') as file:
     json.dump(user, file, indent=2)
+
+print("scissors" in data['name'])
