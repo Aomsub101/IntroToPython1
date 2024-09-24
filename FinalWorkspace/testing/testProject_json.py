@@ -37,6 +37,7 @@
 
 import os
 import json
+import getpass as g
 
 # Change directory to testing
 os.chdir("C:\\Users\\ASUS\\Downloads\\Python\\finalworkspace\\testing")
@@ -56,6 +57,8 @@ CLEAR_SCREEN = ""
 #global variable
 user_name = ''
 is_login = False
+user_id = None
+
 
 # accessable users
 accessible = ["@harbour", "@utcc"]
@@ -79,7 +82,7 @@ def welcome():
     os.system(CLEAR_SCREEN)
 
     # Before login
-    if not is_login:
+    while not is_login:
         print(r"""
                                                             ██╗      ██████╗  ██████╗ ██╗███╗   ██╗
                                                             ██║     ██╔═══██╗██╔════╝ ██║████╗  ██║
@@ -102,31 +105,30 @@ def welcome():
         
         if choice == 'l':
             login()
+            os.system(CLEAR_SCREEN)
         else:
             create_account()
-    
-        is_login = True
 
-        os.system(CLEAR_SCREEN)
-        
-        print(r"""
-                                                        █████╗  ██████╗ ██████╗███████╗███████╗███████╗               
-                                                        ██╔══██╗██╔════╝██╔════╝██╔════╝██╔════╝██╔════╝               
-                                                        ███████║██║     ██║     █████╗  ███████╗███████╗               
-                                                        ██╔══██║██║     ██║     ██╔══╝  ╚════██║╚════██║               
-                                                        ██║  ██║╚██████╗╚██████╗███████╗███████║███████║               
-                                                        ╚═╝  ╚═╝ ╚═════╝ ╚═════╝╚══════╝╚══════╝╚══════╝               
-                                                                                                                    
-                                                ██████╗ ██████╗  █████╗ ███╗   ██╗████████╗███████╗██████╗ ██╗
-                                                ██╔════╝ ██╔══██╗██╔══██╗████╗  ██║╚══██╔══╝██╔════╝██╔══██╗██║
-                                                ██║  ███╗██████╔╝███████║██╔██╗ ██║   ██║   █████╗  ██║  ██║██║
-                                                ██║   ██║██╔══██╗██╔══██║██║╚██╗██║   ██║   ██╔══╝  ██║  ██║╚═╝
-                                                ╚██████╔╝██║  ██║██║  ██║██║ ╚████║   ██║   ███████╗██████╔╝██╗
-                                                ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═════╝ ╚═╝
-                
-                                                                ---- Press any key to continue ----
-        """)
-        input()
+    os.system(CLEAR_SCREEN)
+    
+    print(r"""
+                                                    █████╗  ██████╗ ██████╗███████╗███████╗███████╗               
+                                                    ██╔══██╗██╔════╝██╔════╝██╔════╝██╔════╝██╔════╝               
+                                                    ███████║██║     ██║     █████╗  ███████╗███████╗               
+                                                    ██╔══██║██║     ██║     ██╔══╝  ╚════██║╚════██║               
+                                                    ██║  ██║╚██████╗╚██████╗███████╗███████║███████║               
+                                                    ╚═╝  ╚═╝ ╚═════╝ ╚═════╝╚══════╝╚══════╝╚══════╝               
+                                                                                                                
+                                            ██████╗ ██████╗  █████╗ ███╗   ██╗████████╗███████╗██████╗ ██╗
+                                            ██╔════╝ ██╔══██╗██╔══██╗████╗  ██║╚══██╔══╝██╔════╝██╔══██╗██║
+                                            ██║  ███╗██████╔╝███████║██╔██╗ ██║   ██║   █████╗  ██║  ██║██║
+                                            ██║   ██║██╔══██╗██╔══██║██║╚██╗██║   ██║   ██╔══╝  ██║  ██║╚═╝
+                                            ╚██████╔╝██║  ██║██║  ██║██║ ╚████║   ██║   ███████╗██████╔╝██╗
+                                            ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═════╝ ╚═╝
+            
+                                                            ---- Press any key to continue ----
+    """)
+    input()
 
     os.system(CLEAR_SCREEN)
 
@@ -192,7 +194,8 @@ def welcome():
 
 def login():
     global user_name
-
+    global is_login
+    global user_id
     def get_user_id(user_name):
         for user in user['users']:
             if user['user_name'] == user_name:
@@ -204,23 +207,95 @@ def login():
         password = input("Password: ")
         count = 3
         while user['users'][user_id]['password'] != password:
-            if count <= 0:
+            if count == 0:
                 print("        You run out of retry quota!        ")
-                print("      You will be at welcome page again     ")
+                print("      You will be at Login page again     ")
                 input("------   Press any key to continue   ------")
-                welcome()
+                break
             count -= 1
             if count > 1:
                 print(f"WRONG!\nYou have {count} tries left")
             else:
-                print(f"WRONG!\nYou have {count} try left")
+                print(f"WRONG!\nYou have 1 try left")
 
-            password = input("Please re-enter your password")
+            password = input("Please re-enter your password: ")
             
+        if password == user['users'][user_id]['password']:
+            is_login = True
+        else:
+            return None
         
+    else:
+        print(f"There is no {user_name} account registered.")
+        print("Do you want to create a new account? (Y)es (N)o")
+        choice = input("Enter your choice: ").lower()
+        
+        while choice not in ['y', 'n']:
+            print("Invalid choice!")
+            choice = input("Enter a valid choice: ")
+
+        if choice == 'l':
+            create_account()
+            os.system(CLEAR_SCREEN)
 
 def create_account():
-    pass
+    os.system(CLEAR_SCREEN)
+    print(r"""
+                                                     ██████╗██████╗ ███████╗ █████╗ ████████╗███████╗        
+                                                    ██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔════╝        
+                                                    ██║     ██████╔╝█████╗  ███████║   ██║   █████╗          
+                                                    ██║     ██╔══██╗██╔══╝  ██╔══██║   ██║   ██╔══╝          
+                                                    ╚██████╗██║  ██║███████╗██║  ██║   ██║   ███████╗        
+                                                    ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝        
+                                                                                                            
+                                                 █████╗  ██████╗ ██████╗ ██████╗ ██╗   ██╗███╗   ██╗████████╗
+                                                ██╔══██╗██╔════╝██╔════╝██╔═══██╗██║   ██║████╗  ██║╚══██╔══╝
+                                                ███████║██║     ██║     ██║   ██║██║   ██║██╔██╗ ██║   ██║   
+                                                ██╔══██║██║     ██║     ██║   ██║██║   ██║██║╚██╗██║   ██║   
+                                                ██║  ██║╚██████╗╚██████╗╚██████╔╝╚██████╔╝██║ ╚████║   ██║   
+                                                ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   
+
+                                                 --------   Welcome! please create your account   --------
+                                             ** Please include '@harbour' or '@utcc' in your user name too **
+          """)
+    
+    user_name = input("\nEnter user name with '@harbour' or '@utcc': ")
+
+    while '@harbour' not in user_name and '@utcc' not in user_name:
+        print("\nPlease include '@harbour' or '@utcc' in your username!")
+        user_name = input("Enter your username: ")
+    
+    password = g.getpass("\nPlease create a new password: ")
+
+    new_user = {
+        "user_id": len(user['users']) + 1,
+        "user_name": user_name,
+        "password": password,
+    }
+    user['users'].append(new_user)
+
+    with open('user.json', 'w') as user_file:
+        json.dump(user, user_file, indent=2)
+
+    os.system(CLEAR_SCREEN)
+    print(r"""
+                                                 █████╗  ██████╗ ██████╗ ██████╗ ██╗   ██╗███╗   ██╗████████╗
+                                                ██╔══██╗██╔════╝██╔════╝██╔═══██╗██║   ██║████╗  ██║╚══██╔══╝
+                                                ███████║██║     ██║     ██║   ██║██║   ██║██╔██╗ ██║   ██║   
+                                                ██╔══██║██║     ██║     ██║   ██║██║   ██║██║╚██╗██║   ██║   
+                                                ██║  ██║╚██████╗╚██████╗╚██████╔╝╚██████╔╝██║ ╚████║   ██║   
+                                                ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   
+                                                                                                            
+                                                 ██████╗██████╗ ███████╗ █████╗ ████████╗███████╗██████╗ ██╗ 
+                                                ██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔════╝██╔══██╗██║ 
+                                                ██║     ██████╔╝█████╗  ███████║   ██║   █████╗  ██║  ██║██║ 
+                                                ██║     ██╔══██╗██╔══╝  ██╔══██║   ██║   ██╔══╝  ██║  ██║╚═╝ 
+                                                ╚██████╗██║  ██║███████╗██║  ██║   ██║   ███████╗██████╔╝██╗ 
+                                                ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝ ╚═╝ 
+                                                        
+                                                -----     Press any key to continue to login page     -----
+    """)
+    input()
 
 def action():
     os.system(CLEAR_SCREEN)
