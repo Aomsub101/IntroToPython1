@@ -3,27 +3,22 @@
     {
       "id": 1,
       "name": "scissors",
-      "amount": 100
+      "amount": 6500
     },
     {
       "id": 2,
       "name": "pencils",
-      "amount": 50
+      "amount": 84000
     },
     {
       "id": 3,
       "name": "microphones",
-      "amount": 15
+      "amount": 10000
     },
     {
       "id": 4,
       "name": "batteries",
-      "amount": 25
-    },
-    {
-      "id": 5,
-      "name": "bag",
-      "amount": 50
+      "amount": 100000
     }
   ]
 }

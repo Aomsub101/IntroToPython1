@@ -68,7 +68,7 @@ CLEAR_SCREEN = ""
 # accessable users
 accessible = ["@harbour", "@utcc"]
 
-def check_user_system():
+def check_user_system() -> None:
     global USER_OS
     global CLEAR_SCREEN
     
@@ -81,7 +81,7 @@ def check_user_system():
         USER_OS = "UNIX"
         CLEAR_SCREEN = "clear"
 
-def welcome():
+def welcome() -> None:
     global user_name
     global is_login
     os.system(CLEAR_SCREEN)
@@ -197,12 +197,12 @@ def welcome():
     
     action()
 
-def login():
+def login() -> None:
     global user_name
     global is_login
     global user_id
 
-    def get_user_id(user_name):
+    def get_user_id(user_name: str) -> int:
         for usr in user['users']:
             if usr['user_name'] == user_name:
                 return usr['id'] - 1
@@ -253,7 +253,7 @@ def login():
     is_login = True
 
 
-def create_account():
+def create_account() -> None:
     os.system(CLEAR_SCREEN)
     print(r"""
                                                      ██████╗██████╗ ███████╗ █████╗ ████████╗███████╗        
@@ -318,7 +318,7 @@ def create_account():
     input()
     os.system(CLEAR_SCREEN)
 
-def action():
+def action() -> None:
     exit_ = False
     while not exit_:
         os.system(CLEAR_SCREEN)
@@ -355,7 +355,7 @@ def action():
     exit()
 
 
-def lending():
+def lending() -> None:
     global user_name
     global is_item_exist
 
@@ -377,7 +377,7 @@ def lending():
         user_items = user['users'][user_id-1]['items']
         user_item_index = len(user['users'][user_id-1]['items'])
 
-        def get_item_index(item_id):
+        def get_item_index(item_id: int) -> int:
             count = 0
             for item in user_items:
                 if item['id'] == item_id:
@@ -413,6 +413,7 @@ def lending():
             user_item_index = get_item_index(item_id)
 
         print(f"\nHow many {inventory['items'][item_id-1]['name']} do you want to lend?")
+
         while True: 
             try:
                 amount = int(input("Enter amount: "))
@@ -435,6 +436,7 @@ def lending():
                     print("\nPlease lending the available amount")
 
         inventory['items'][item_id-1]['amount'] -= amount
+
         with open('inventory.json', 'w', encoding='utf-8') as inventory_file:
             json.dump(inventory, inventory_file, indent=2)
 
@@ -523,8 +525,9 @@ def lending():
     """)
     input()
 
-def show_inventory():
+def show_inventory() -> None:
     global inventory
+
     print("\nINVENTORY LIST")
     print(f"{'':<2}{'Id'}{'':<2}|{'':<2}{'Item':<15} {'Amount':<10}")
     print("-" *50)
@@ -537,7 +540,7 @@ def show_inventory():
 
     print("-" * 50)
 
-def returning():
+def returning() -> None:
     os.system(CLEAR_SCREEN)
     print(r"""
                                             ██████╗ ███████╗████████╗██╗   ██╗██████╗ ███╗   ██╗██╗███╗   ██╗ ██████╗ 
@@ -620,7 +623,7 @@ def returning():
     """)
         input()
 
-def add_item():
+def add_item() -> None:
     os.system(CLEAR_SCREEN)
 
     print(r"""
@@ -675,9 +678,8 @@ def add_item():
     """)
     input()
 
-def show_user_inventory():
+def show_user_inventory() -> None:
     print("\nYOUR INVENTORY\n")
-
     
     print(f"{'':<2}{'Id'}{'':<2}|{'':<2}{'Item':<15} {'Amount':<10}")
     print("-" *50)
@@ -691,8 +693,9 @@ def show_user_inventory():
 
     print("-" * 50)
 
-def exit():
+def exit() -> None:
     os.system(CLEAR_SCREEN)
+    
     if len(user['users'][user_id-1]['items']):
         print("DON'T FORGET TO RETURN THESE STUFF!!!")
         show_user_inventory()

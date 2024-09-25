@@ -1,16 +1,3 @@
 {
-  "users": [
-    {
-      "id": 1,
-      "user_name": "aomsub@harbour",
-      "password": "test123",
-      "items": []
-    },
-    {
-      "id": 2,
-      "user_name": "test123@utcc",
-      "password": "test123",
-      "items": []
-    }
-  ]
+  "users": []
 }
