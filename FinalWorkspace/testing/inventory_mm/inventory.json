@@ -1,0 +1,29 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "name": "scissors",
+      "amount": 50
+    },
+    {
+      "id": 2,
+      "name": "pencils",
+      "amount": 0
+    },
+    {
+      "id": 3,
+      "name": "microphones",
+      "amount": 15
+    },
+    {
+      "id": 4,
+      "name": "batteries",
+      "amount": 25
+    },
+    {
+      "id": 5,
+      "name": "bag",
+      "amount": 50
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "user_name": "aomsub@harbour",
+      "password": "test123",
+      "items": [
+        {
+          "id": 1,
+          "name": "scissors",
+          "amount": 50,
+          "days": 2
+        },
+        {
+          "id": 2,
+          "name": "pencils",
+          "amount": 50,
+          "days": 1
+        }
+      ]
+    }
+  ]
+}

@@ -48,8 +48,10 @@ user_id = None
 user = {}
 inventory = {}
 
-# Change directory to testing
-os.chdir("C:\\Users\\ASUS\\Downloads\\Python\\finalworkspace\\testing")
+# Change directory
+current_path = os.getcwd()
+new_path = os.path.join(current_path, 'FinalWorkspace', 'My_final')
+os.chdir(new_path)    
 
 # get inventory
 with open('inventory.json', 'r', encoding='utf-8') as inventory_file:
