@@ -1,3 +1,22 @@
 {
-  "users": []
+  "users": [
+    {
+      "id": 1,
+      "user_name": "cookie@harbour",
+      "password": "therabbiteatsthelion",
+      "items": []
+    },
+    {
+      "id": 2,
+      "user_name": "aomsub@harbour",
+      "password": "hello",
+      "items": []
+    },
+    {
+      "id": 3,
+      "user_name": "23213@harbour",
+      "password": "test123",
+      "items": []
+    }
+  ]
 }

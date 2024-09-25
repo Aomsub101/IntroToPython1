@@ -106,7 +106,7 @@ def welcome() -> None:
 
         while choice not in ['l', 'c']:
             print("\nInvalid choice!")
-            choice = input("Enter your choice again: ")
+            choice = input("Enter your choice again: ").lower()
         
         if choice == 'l':
             login()
@@ -117,21 +117,21 @@ def welcome() -> None:
     os.system(CLEAR_SCREEN)
     
     print(r"""
-                                                    █████╗  ██████╗ ██████╗███████╗███████╗███████╗               
+                                                     █████╗  ██████╗ ██████╗███████╗███████╗███████╗               
                                                     ██╔══██╗██╔════╝██╔════╝██╔════╝██╔════╝██╔════╝               
                                                     ███████║██║     ██║     █████╗  ███████╗███████╗               
                                                     ██╔══██║██║     ██║     ██╔══╝  ╚════██║╚════██║               
                                                     ██║  ██║╚██████╗╚██████╗███████╗███████║███████║               
                                                     ╚═╝  ╚═╝ ╚═════╝ ╚═════╝╚══════╝╚══════╝╚══════╝               
                                                                                                                 
-                                            ██████╗ ██████╗  █████╗ ███╗   ██╗████████╗███████╗██████╗ ██╗
+                                             ██████╗ ██████╗  █████╗ ███╗   ██╗████████╗███████╗██████╗ ██╗
                                             ██╔════╝ ██╔══██╗██╔══██╗████╗  ██║╚══██╔══╝██╔════╝██╔══██╗██║
                                             ██║  ███╗██████╔╝███████║██╔██╗ ██║   ██║   █████╗  ██║  ██║██║
                                             ██║   ██║██╔══██╗██╔══██║██║╚██╗██║   ██║   ██╔══╝  ██║  ██║╚═╝
                                             ╚██████╔╝██║  ██║██║  ██║██║ ╚████║   ██║   ███████╗██████╔╝██╗
-                                            ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═════╝ ╚═╝
+                                             ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═════╝ ╚═╝
             
-                                                            ---- Press any key to continue ----
+                                                            ---- Press Enter to continue ----
     """)
     input()
 
@@ -144,7 +144,7 @@ def welcome() -> None:
                                                     ██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗  
                                                     ██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝  
                                                     ╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗
-                                                    ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝
+                                                     ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝
                                                                                                                                 
                                                                                                                                 
                                                                                                                                 
@@ -191,7 +191,7 @@ def welcome() -> None:
                                                     ███████╗███████╗██║ ╚████║██████╔╝██║██║ ╚████║╚██████╔╝         
                                                     ╚══════╝╚══════╝╚═╝  ╚═══╝╚═════╝ ╚═╝╚═╝  ╚═══╝ ╚═════╝     
                     
-                                                    ----------     Press any key to continue     ----------                                                  
+                                                        ----------     Press Enter to continue     ----------                                                  
     """)
     input()
     
@@ -230,7 +230,12 @@ def login() -> None:
     user_id = get_user_id(user_name)
 
     password_check = user['users'][user_id]['password']
-    password = g.getpass("Password(It will be invisible): ")
+    password = g.getpass("Password(It will be invisible) or press (F) and enter if forget password: ")
+    
+    if password in ['f', 'F']:
+        show_password(user_name, password_check)
+        return None
+
     count = 3
     while password_check != password:
         if count == 1:
@@ -238,30 +243,71 @@ def login() -> None:
             print(r"""       
                                                                 You run out of retry quota!
                                                             You will be at Login page again 
-                                                        ------   Press any key to continue   ------     
+                                                         ------   Press Enter to continue   ------     
             """)
             input()
             return None
+        
         count -= 1
         if count > 1:
             print(f"\nWRONG!\nYou have {count} tries left")
         else:
             print(f"\nWRONG!\nYou have 1 try left. Don't get it wrong!")
+        
+        print("\nPress (F) then enter if forget your password")
 
         password = g.getpass("Please re-enter your password: ")
+        if password in ['f', 'F']:
+            show_password(user_name, password_check)
+            return None
+        
+        
+            
         
     is_login = True
 
+def show_password(user_name: str, password: str) -> None:
+    os.system(CLEAR_SCREEN)
+    
+    print(r"""
+
+
+                                            ███╗   ██╗███████╗██╗  ██╗████████╗    ████████╗██╗███╗   ███╗███████╗
+                                            ████╗  ██║██╔════╝╚██╗██╔╝╚══██╔══╝    ╚══██╔══╝██║████╗ ████║██╔════╝
+                                            ██╔██╗ ██║█████╗   ╚███╔╝    ██║          ██║   ██║██╔████╔██║█████╗  
+                                            ██║╚██╗██║██╔══╝   ██╔██╗    ██║          ██║   ██║██║╚██╔╝██║██╔══╝  
+                                            ██║ ╚████║███████╗██╔╝ ██╗   ██║          ██║   ██║██║ ╚═╝ ██║███████╗
+                                            ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝   ╚═╝          ╚═╝   ╚═╝╚═╝     ╚═╝╚══════╝
+                                                                                                                
+                                                            ██████╗  ██████╗ ███╗   ██╗████████╗                  
+                                                            ██╔══██╗██╔═══██╗████╗  ██║╚══██╔══╝                  
+                                                            ██║  ██║██║   ██║██╔██╗ ██║   ██║                     
+                                                            ██║  ██║██║   ██║██║╚██╗██║   ██║                     
+                                                            ██████╔╝╚██████╔╝██║ ╚████║   ██║                     
+                                                            ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝                     
+                                                                                                                
+                                                    ███████╗ ██████╗ ██████╗  ██████╗ ███████╗████████╗           
+                                                    ██╔════╝██╔═══██╗██╔══██╗██╔════╝ ██╔════╝╚══██╔══╝           
+                                                    █████╗  ██║   ██║██████╔╝██║  ███╗█████╗     ██║              
+                                                    ██╔══╝  ██║   ██║██╔══██╗██║   ██║██╔══╝     ██║              
+                                                    ██║     ╚██████╔╝██║  ██║╚██████╔╝███████╗   ██║              
+                                                    ╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝              
+   
+    """)
+    print("*" * 49)
+    print(f"The password for account '{user_name}' is: '{password}'")
+    print("*" * 10 + "   Press Enter to continue   "+ "*" * 10)
+    input()
 
 def create_account() -> None:
     os.system(CLEAR_SCREEN)
     print(r"""
-                                                     ██████╗██████╗ ███████╗ █████╗ ████████╗███████╗        
-                                                    ██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔════╝        
-                                                    ██║     ██████╔╝█████╗  ███████║   ██║   █████╗          
-                                                    ██║     ██╔══██╗██╔══╝  ██╔══██║   ██║   ██╔══╝          
-                                                    ╚██████╗██║  ██║███████╗██║  ██║   ██║   ███████╗        
-                                                     ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝        
+                                                       ██████╗██████╗ ███████╗ █████╗ ████████╗███████╗        
+                                                      ██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔════╝        
+                                                      ██║     ██████╔╝█████╗  ███████║   ██║   █████╗          
+                                                      ██║     ██╔══██╗██╔══╝  ██╔══██║   ██║   ██╔══╝          
+                                                      ╚██████╗██║  ██║███████╗██║  ██║   ██║   ███████╗        
+                                                       ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝        
                                                                                                             
                                                  █████╗  ██████╗ ██████╗ ██████╗ ██╗   ██╗███╗   ██╗████████╗
                                                 ██╔══██╗██╔════╝██╔════╝██╔═══██╗██║   ██║████╗  ██║╚══██╔══╝
@@ -271,20 +317,28 @@ def create_account() -> None:
                                                 ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   
 
                                                  --------   Welcome! please create your account   --------
-                                             ** Please include '@harbour' or '@utcc' in your user name too **
+                                              ** Please ended with '@harbour' or '@utcc' in your user name **
           """)
     
     user_name = input("\nEnter user name with '@harbour' or '@utcc': ").lower()
 
-    while '@harbour' not in user_name and '@utcc' not in user_name:
-        print("\nPlease include '@harbour' or '@utcc' in your username!")
-        user_name = input("Enter your username: ")
+    cond1 = user_name[len(user_name)-8: len(user_name)] != "@harbour"
+    cond2 = user_name[len(user_name)-5: len(user_name)] != "@utcc"
     
+    while cond1 and cond2:
+        print("\nPlease ended with '@harbour' or '@utcc' in your username!")
+        user_name = input("Enter your username again: ").lower()
+        cond1 = user_name[len(user_name)-8: len(user_name)] != "@harbour"
+        cond2 = user_name[len(user_name)-5: len(user_name)] != "@utcc"
+
     while any(usr['user_name'] == user_name for usr in user['users']):
         print("\nThis account already exists")
-        user_name = input("Please think of a new username: ")
+        user_name = input("Please think of a new username: ").lower()
 
-    password = g.getpass("\nPlease create a new password(it will be invisible): ")
+    password = g.getpass("\nPlease create a new password longer than 5 character(it will be invisible): ")
+
+    while len(password) <= 5:
+        password = g.getpass("\nPassword must contain more than 5 character(it will be invisible): ").lower()
 
     new_user = {
         "id": len(user['users']) + 1,
@@ -299,21 +353,21 @@ def create_account() -> None:
 
     os.system(CLEAR_SCREEN)
     print(r"""
-                                                        █████╗  ██████╗ ██████╗ ██████╗ ██╗   ██╗███╗   ██╗████████╗
+                                                         █████╗  ██████╗ ██████╗ ██████╗ ██╗   ██╗███╗   ██╗████████╗
                                                         ██╔══██╗██╔════╝██╔════╝██╔═══██╗██║   ██║████╗  ██║╚══██╔══╝
                                                         ███████║██║     ██║     ██║   ██║██║   ██║██╔██╗ ██║   ██║   
                                                         ██╔══██║██║     ██║     ██║   ██║██║   ██║██║╚██╗██║   ██║   
                                                         ██║  ██║╚██████╗╚██████╗╚██████╔╝╚██████╔╝██║ ╚████║   ██║   
                                                         ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   
                                                                                                                     
-                                                        ██████╗██████╗ ███████╗ █████╗ ████████╗███████╗██████╗ ██╗ 
+                                                         ██████╗██████╗ ███████╗ █████╗ ████████╗███████╗██████╗ ██╗ 
                                                         ██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔════╝██╔══██╗██║ 
                                                         ██║     ██████╔╝█████╗  ███████║   ██║   █████╗  ██║  ██║██║ 
                                                         ██║     ██╔══██╗██╔══╝  ██╔══██║   ██║   ██╔══╝  ██║  ██║╚═╝ 
                                                         ╚██████╗██║  ██║███████╗██║  ██║   ██║   ███████╗██████╔╝██╗ 
-                                                        ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝ ╚═╝ 
+                                                         ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝ ╚═╝ 
                                                                 
-                                                        -----     Press any key to continue to login page     -----
+                                                          -----     Press Enter to continue to login page     -----
     """)
     input()
     os.system(CLEAR_SCREEN)
@@ -341,8 +395,7 @@ def action() -> None:
         choice = input("Select your choice: ").lower()
 
         while choice not in ['l', 'r', 'a', 'n']:
-            print("Please choose the appropriate choice: ")
-            choice = input().lower()
+            choice = input("Please choose the appropriate choice: ").lower()
         
         if choice == 'l':
             lending()
@@ -521,7 +574,7 @@ def lending() -> None:
                                                         ██║   ██║  ██║██║  ██║██║ ╚████║██║  ██╗███████║██╗
                                                         ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝
           
-                                                                ---- Press any key to continue ----
+                                                                ---- Press Enter to continue ----
     """)
     input()
 
@@ -551,7 +604,14 @@ def returning() -> None:
                                             ╚═╝  ╚═╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═══╝ ╚═════╝ 
 
 """)
-    print("What do you want to return?")
+    if len(user['users'][user_id-1]['items']) == 0:
+        print(r"""
+                                                                      You have no lended item!
+                                                               -----  Press enter to continue  -----
+    """)
+        input()
+        return None
+
     show_user_inventory()
     print("What item do you want to return?")
     while True:
@@ -593,7 +653,7 @@ def returning() -> None:
                                                         ██║   ██╔══██║██╔══██║██║╚██╗██║██╔═██╗ ╚════██║╚═╝
                                                         ██║   ██║  ██║██║  ██║██║ ╚████║██║  ██╗███████║██╗
                                                         ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝
-                                                         ------    Press any key rro continue    ------
+                                                            ------    Press Enter to continue    ------
         """)
         
         for usr in user['users'][user_id-1]['items']:
@@ -619,7 +679,7 @@ def returning() -> None:
                                                                     ██████╔╝   ██║   ███████╗
                                                                     ╚═════╝    ╚═╝   ╚══════╝
               
-                                                         ------    Press any key rro continue    ------
+                                                           ------    Press Enter to continue    ------
     """)
         input()
 
@@ -674,7 +734,7 @@ def add_item() -> None:
                                                                 ██║  ██║██████╔╝██████╔╝███████╗██████╔╝
                                                                 ╚═╝  ╚═╝╚═════╝ ╚═════╝ ╚══════╝╚═════╝ 
 
-                                                             -------    Press any key to continue    -------
+                                                             -------    Press Enter to continue    -------
     """)
     input()
 
@@ -695,7 +755,7 @@ def show_user_inventory() -> None:
 
 def exit() -> None:
     os.system(CLEAR_SCREEN)
-    
+
     if len(user['users'][user_id-1]['items']):
         print("DON'T FORGET TO RETURN THESE STUFF!!!")
         show_user_inventory()
@@ -708,7 +768,7 @@ def exit() -> None:
                                         //     ██║   ██╔══██║██╔══██║██║╚██╗██║██╔═██╗       ╚██╔╝  ██║   ██║██║   ██║  //
                                         //     ██║   ██║  ██║██║  ██║██║ ╚████║██║  ██╗       ██║   ╚██████╔╝╚██████╔╝  //
                                         //     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝       ╚═╝    ╚═════╝  ╚═════╝   //
-                                        //////////////////////////    Press any key to exit    ///////////////////////////
+                                        //////////////////////////     Press Enter to exit     ///////////////////////////
         """)
 
         input()
@@ -721,7 +781,7 @@ def exit() -> None:
                                         //     ██║   ██╔══██║██╔══██║██║╚██╗██║██╔═██╗       ╚██╔╝  ██║   ██║██║   ██║  //
                                         //     ██║   ██║  ██║██║  ██║██║ ╚████║██║  ██╗       ██║   ╚██████╔╝╚██████╔╝  //
                                         //     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝       ╚═╝    ╚═════╝  ╚═════╝   //
-                                        //////////////////////////    Press any key to exit    ///////////////////////////
+                                        //////////////////////////     Press Enter to exit     ///////////////////////////
         """)
         input()
 
