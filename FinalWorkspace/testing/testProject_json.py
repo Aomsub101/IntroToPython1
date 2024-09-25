@@ -316,37 +316,40 @@ def create_account():
     os.system(CLEAR_SCREEN)
 
 def action():
-    os.system(CLEAR_SCREEN)
+    exit_ = False
+    while not exit_:
+        os.system(CLEAR_SCREEN)
 
-    print(r"""
-                                                ██████╗ ██╗   ██╗██████╗ ██████╗  ██████╗ ███████╗███████╗██████╗ 
-                                                ██╔══██╗██║   ██║██╔══██╗██╔══██╗██╔═══██╗██╔════╝██╔════╝╚════██╗
-                                                ██████╔╝██║   ██║██████╔╝██████╔╝██║   ██║███████╗█████╗    ▄███╔╝
-                                                ██╔═══╝ ██║   ██║██╔══██╗██╔═══╝ ██║   ██║╚════██║██╔══╝    ▀▀══╝ 
-                                                ██║     ╚██████╔╝██║  ██║██║     ╚██████╔╝███████║███████╗  ██╗   
-                                                ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚═╝      ╚═════╝ ╚══════╝╚══════╝  ╚═╝   
-                                                                
-                                                                What is your purpose here?
-                                                                        (L)ending
-                                                                        (R)eturning
-                                                                        (A)dd lending item
-                                                                        (N)othing just chilling
-    """)
-    
-    choice = input("Select your choice: ").lower()
+        print(r"""
+                                                    ██████╗ ██╗   ██╗██████╗ ██████╗  ██████╗ ███████╗███████╗██████╗ 
+                                                    ██╔══██╗██║   ██║██╔══██╗██╔══██╗██╔═══██╗██╔════╝██╔════╝╚════██╗
+                                                    ██████╔╝██║   ██║██████╔╝██████╔╝██║   ██║███████╗█████╗    ▄███╔╝
+                                                    ██╔═══╝ ██║   ██║██╔══██╗██╔═══╝ ██║   ██║╚════██║██╔══╝    ▀▀══╝ 
+                                                    ██║     ╚██████╔╝██║  ██║██║     ╚██████╔╝███████║███████╗  ██╗   
+                                                    ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚═╝      ╚═════╝ ╚══════╝╚══════╝  ╚═╝   
+                                                                    
+                                                                    What is your purpose here?
+                                                                            (L)ending
+                                                                            (R)eturning
+                                                                            (A)dd lending item
+                                                                            (N)othing just chilling
+        """)
+        
+        choice = input("Select your choice: ").lower()
 
-    while choice not in ['l', 'r', 'n']:
-        print("Please choose the appropriate choice: ")
-        choice = input().lower()
-    
-    if choice == 'l':
-        lending()
-    elif choice == 'r':
-        returning()
-    elif choice == 'a':
-        add_item()
-    else:
-        exit()
+        while choice not in ['l', 'r', 'a', 'n']:
+            print("Please choose the appropriate choice: ")
+            choice = input().lower()
+        
+        if choice == 'l':
+            lending()
+        elif choice == 'r':
+            returning()
+        elif choice == 'a':
+            add_item()
+        else:
+            exit_ = True
+    exit()
 
 
 def lending():
@@ -517,8 +520,6 @@ def lending():
     """)
     input()
 
-    action()
-
 def show_inventory():
     global inventory
     print("\nINVENTORY LIST")
@@ -602,7 +603,6 @@ def returning():
             json.dump(inventory, inventory_file, indent=2)
 
         input() 
-        action()
 
     elif choice == 'n':
         print(r"""
@@ -616,7 +616,6 @@ def returning():
                                                          ------    Press any key rro continue    ------
     """)
         input()
-        action()
 
 def add_item():
     os.system(CLEAR_SCREEN)
@@ -628,9 +627,50 @@ def add_item():
                                                     ██╔══██║██║  ██║██║  ██║    ██║   ██║   ██╔══╝  ██║╚██╔╝██║
                                                     ██║  ██║██████╔╝██████╔╝    ██║   ██║   ███████╗██║ ╚═╝ ██║
                                                     ╚═╝  ╚═╝╚═════╝ ╚═════╝     ╚═╝   ╚═╝   ╚══════╝╚═╝     ╚═╝
-
+                                                           
+                                                           ------    Welcome to add item page!    ------
     """)
     pass
+
+    new_item = {}
+    print("What item do you want to add?")
+    item_name = input("Enter item name: ")
+
+    print("\nHow many?")
+    while True:
+        try:
+            amount = int(input("Enter amount: "))
+            break
+        except ValueError:
+            print("\nPlease enter a number!")
+
+    new_item.update({"id": len(inventory['items'])+1})
+    new_item.update({"name": item_name})
+    new_item.update({"amount": amount})
+
+    inventory['items'].append(new_item)
+
+    with open('inventory.json', 'w', encoding='utf-8') as inventory_file:
+        json.dump(inventory, inventory_file, indent=2)
+
+    print(r"""
+                                                                    ██╗████████╗███████╗███╗   ███╗     
+                                                                    ██║╚══██╔══╝██╔════╝████╗ ████║     
+                                                                    ██║   ██║   █████╗  ██╔████╔██║     
+                                                                    ██║   ██║   ██╔══╝  ██║╚██╔╝██║     
+                                                                    ██║   ██║   ███████╗██║ ╚═╝ ██║     
+                                                                    ╚═╝   ╚═╝   ╚══════╝╚═╝     ╚═╝     
+                                                                                                        
+                                                                 █████╗ ██████╗ ██████╗ ███████╗██████╗ 
+                                                                ██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔══██╗
+                                                                ███████║██║  ██║██║  ██║█████╗  ██║  ██║
+                                                                ██╔══██║██║  ██║██║  ██║██╔══╝  ██║  ██║
+                                                                ██║  ██║██████╔╝██████╔╝███████╗██████╔╝
+                                                                ╚═╝  ╚═╝╚═════╝ ╚═════╝ ╚══════╝╚═════╝ 
+
+                                                             -------    Press any key to continue    -------
+    """)
+    input()
 
 def show_user_inventory():
     print("\nYOUR INVENTORY\n")
@@ -650,20 +690,34 @@ def show_user_inventory():
 
 def exit():
     os.system(CLEAR_SCREEN)
-    print(r"""
-                                    //////////////////////////////////////////////////////////////////////////////////
-                                    //  ████████╗██╗  ██╗ █████╗ ███╗   ██╗██╗  ██╗    ██╗   ██╗ ██████╗ ██╗   ██╗  //
-                                    //  ╚══██╔══╝██║  ██║██╔══██╗████╗  ██║██║ ██╔╝    ╚██╗ ██╔╝██╔═══██╗██║   ██║  //
-                                    //     ██║   ███████║███████║██╔██╗ ██║█████╔╝      ╚████╔╝ ██║   ██║██║   ██║  //
-                                    //     ██║   ██╔══██║██╔══██║██║╚██╗██║██╔═██╗       ╚██╔╝  ██║   ██║██║   ██║  //
-                                    //     ██║   ██║  ██║██║  ██║██║ ╚████║██║  ██╗       ██║   ╚██████╔╝╚██████╔╝  //
-                                    //     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝       ╚═╝    ╚═════╝  ╚═════╝   //
-                                    //////////////////////////////////////////////////////////////////////////////////
-    """)
-    
-    print("DON'T FORGET TO RETURN THESE STUFF!!!")
-    show_user_inventory()
+    if len(user['users'][user_id-1]['items']):
+        print("DON'T FORGET TO RETURN THESE STUFF!!!")
+        show_user_inventory()
+        
+        print(r"""
+                                        //////////////////////////////////////////////////////////////////////////////////
+                                        //  ████████╗██╗  ██╗ █████╗ ███╗   ██╗██╗  ██╗    ██╗   ██╗ ██████╗ ██╗   ██╗  //
+                                        //  ╚══██╔══╝██║  ██║██╔══██╗████╗  ██║██║ ██╔╝    ╚██╗ ██╔╝██╔═══██╗██║   ██║  //
+                                        //     ██║   ███████║███████║██╔██╗ ██║█████╔╝      ╚████╔╝ ██║   ██║██║   ██║  //
+                                        //     ██║   ██╔══██║██╔══██║██║╚██╗██║██╔═██╗       ╚██╔╝  ██║   ██║██║   ██║  //
+                                        //     ██║   ██║  ██║██║  ██║██║ ╚████║██║  ██╗       ██║   ╚██████╔╝╚██████╔╝  //
+                                        //     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝       ╚═╝    ╚═════╝  ╚═════╝   //
+                                        //////////////////////////    Press any key to exit    ///////////////////////////
+        """)
 
+        input()
+    else:
+        print(r"""
+                                        //////////////////////////////////////////////////////////////////////////////////
+                                        //  ████████╗██╗  ██╗ █████╗ ███╗   ██╗██╗  ██╗    ██╗   ██╗ ██████╗ ██╗   ██╗  //
+                                        //  ╚══██╔══╝██║  ██║██╔══██╗████╗  ██║██║ ██╔╝    ╚██╗ ██╔╝██╔═══██╗██║   ██║  //
+                                        //     ██║   ███████║███████║██╔██╗ ██║█████╔╝      ╚████╔╝ ██║   ██║██║   ██║  //
+                                        //     ██║   ██╔══██║██╔══██║██║╚██╗██║██╔═██╗       ╚██╔╝  ██║   ██║██║   ██║  //
+                                        //     ██║   ██║  ██║██║  ██║██║ ╚████║██║  ██╗       ██║   ╚██████╔╝╚██████╔╝  //
+                                        //     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝       ╚═╝    ╚═════╝  ╚═════╝   //
+                                        //////////////////////////    Press any key to exit    ///////////////////////////
+        """)
+        input()
 
 if __name__ == "__main__":
     check_user_system()
