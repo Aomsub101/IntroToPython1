@@ -4,7 +4,7 @@
    # user system check
    # Welcome
 
-   # Login --> Have to have an account --> name@harbour.com --> gaining access
+   # Login --> Have to have an account --> name@harbour or name@utcc--> gaining access
 
    # Auth system
 
@@ -14,6 +14,7 @@
 
    # Returning --> what is returned?, by who?, return date.
 
+   # Add item --> what item?, For how many?
 # Flow
    # User_system_check --> config
 
@@ -22,12 +23,12 @@
 
    # Lending --> Inventory
    # Returning
-
+   # Add item
 # For window and unix users
 
 # Database idea:
     # Dictionary
-    # JSON
+    # JSON ✅
     # List
 
 # Encryption idea:
