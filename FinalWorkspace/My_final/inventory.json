@@ -3,12 +3,12 @@
     {
       "id": 1,
       "name": "scissors",
-      "amount": 50
+      "amount": 100
     },
     {
       "id": 2,
       "name": "pencils",
-      "amount": 0
+      "amount": 50
     },
     {
       "id": 3,

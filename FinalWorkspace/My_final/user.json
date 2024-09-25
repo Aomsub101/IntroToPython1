@@ -4,20 +4,13 @@
       "id": 1,
       "user_name": "aomsub@harbour",
       "password": "test123",
-      "items": [
-        {
-          "id": 1,
-          "name": "scissors",
-          "amount": 50,
-          "days": 2
-        },
-        {
-          "id": 2,
-          "name": "pencils",
-          "amount": 50,
-          "days": 1
-        }
-      ]
+      "items": []
+    },
+    {
+      "id": 2,
+      "user_name": "test123@utcc",
+      "password": "test123",
+      "items": []
     }
   ]
 }
