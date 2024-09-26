@@ -207,7 +207,7 @@ def login() -> None:
             if usr['user_name'] == user_name:
                 return usr['id'] - 1
 
-    user_name = input("\nPlease enter your user name: ")
+    user_name = input("\nPlease enter your user name: ").lower()
 
     while not (any(each_user['user_name'] == user_name for each_user in user['users'])):
         print(f"There is no {user_name} account registered.")
