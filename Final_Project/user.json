@@ -1,4 +1,16 @@
 {
   "users": [
+    {
+      "id": 1,
+      "user_name": "aomsub@harbour",
+      "password": "test122345",
+      "items": []
+    },
+    {
+      "id": 2,
+      "user_name": "vetit@utcc",
+      "password": "qwerty",
+      "items": []
+    }
   ]
 }

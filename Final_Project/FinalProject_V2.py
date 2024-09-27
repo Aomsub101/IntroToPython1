@@ -33,7 +33,7 @@
 
 # Encryption idea:
     # Hashing
-    # 
+
 ##################################################################################################
 
 import os
@@ -664,7 +664,7 @@ def lending() -> None:
     print(f"{'|':<18}Confirm lending")
     print(f"{'|':<5}{'User:':<5}{user_name:<15}")
     print(f"{'|':<5}List of lended items")
-    print(f"{'|':<5}{'Id'}{'':<2}|{'':<2}{'Item':<15} {'Amount':<10} {'Days till returning'}")
+    print(f"{'|':<5}{'Id'}{'':<2}|{'':<2}{'Item':<25} {'Amount':<10} {'Days till returning'}")
 
     for item in user_items:
         ID = item['id']
@@ -672,7 +672,7 @@ def lending() -> None:
         amount = item['amount']        
         days = item['days']
 
-        print(f"{'|':<5}{ID:<2}{'':<2}|{'':<2}{item_name:<15} {amount:<10} {days}")
+        print(f"{'|':<5}{ID:<2}{'':<2}|{'':<2}{item_name:<25} {amount:<10} {days}")
 
     user['users'][user_id-1].update({"items": user_items})
 
@@ -708,14 +708,14 @@ def show_inventory() -> None:
     global inventory
 
     print("\nINVENTORY LIST")
-    print(f"{'':<2}{'Id'}{'':<2}|{'':<2}{'Item':<15} {'Amount':<10}")
+    print(f"{'':<2}{'Id'}{'':<2}|{'':<2}{'Item':<25} {'Amount':<10}")
     print("-" *50)
 
     for itm in inventory['items']:
         ID = itm['id']
         item_name = itm['name']
         amount = itm['amount']
-        print(f"{'':<2}{ID:<2}{'':<2}|{'':<2}{item_name:<15} {amount:<10}")
+        print(f"{'':<2}{ID:<2}{'':<2}|{'':<2}{item_name:<25} {amount:<10}")
 
     print("-" * 50)
 
@@ -769,7 +769,7 @@ def returning() -> None:
         if any(item['id'] == item_id for item in inventory['items']):
             print(f"\nYou DID NOT lend {inventory['items'][item_id-1]['name']}!")
         else:
-            print(f"\nThere is no item with that ID!")
+            print("\nThere is no item with that ID!")
         while True:
             try:
                 item_id = int(input("Enter item id: "))
@@ -928,7 +928,7 @@ def show_user_inventory() -> None:
 
     print("\nYOUR INVENTORY\n")
     
-    print(f"{'':<2}{'Id'}{'':<2}|{'':<2}{'Item':<15} {'Amount':<10}")
+    print(f"{'':<2}{'Id'}{'':<2}|{'':<2}{'Item':<25} {'Amount':<10}")
     print("-" *50)
 
     for usr_item in user['users'][user_id-1]['items']:
@@ -936,7 +936,7 @@ def show_user_inventory() -> None:
         item_name = usr_item['name']
         amount = usr_item['amount']
 
-        print(f"{'':<2}{ID:<2}{'':<2}|{'':<2}{item_name:<15} {amount:<10}")
+        print(f"{'':<2}{ID:<2}{'':<2}|{'':<2}{item_name:<25} {amount:<10}")
 
     print("-" * 50)
 
