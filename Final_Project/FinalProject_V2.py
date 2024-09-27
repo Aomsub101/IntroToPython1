@@ -51,11 +51,11 @@ new_path = os.path.join(current_path, 'Final_Project')
 os.chdir(new_path)    
 
 # get inventory
-with open('inventory.json', 'r') as inventory_file:
+with open('inventory.json', 'r', encoding='utf-8') as inventory_file:
     inventory = json.load(inventory_file)
 
 # get user data
-with open('user.json', 'r') as user_file:
+with open('user.json', 'r', encoding='utf-8') as user_file:
     user = json.load(user_file)
 
 # user system
@@ -132,7 +132,6 @@ def welcome() -> None:
             create_account()
 
     os.system(CLEAR_SCREEN)
-    
     print(r"""
                                                      █████╗  ██████╗ ██████╗███████╗███████╗███████╗               
                                                     ██╔══██╗██╔════╝██╔════╝██╔════╝██╔════╝██╔════╝               
@@ -151,7 +150,6 @@ def welcome() -> None:
                                                             ---- Press Enter to continue ----
     """)
     input()
-
     os.system(CLEAR_SCREEN)
 
     # After login
@@ -211,7 +209,6 @@ def welcome() -> None:
                                                         ----------     Press Enter to continue     ----------                                                  
     """)
     input()
-    
     action()
 
 
@@ -243,11 +240,12 @@ def login() -> None:
     global user_name
     global user_id
 
+
     def get_user_id(user_name: str) -> int:
         """
         ## args -> user_name as string
 
-        ## return -> integer
+        ## return -> user_id as integer
         
         This sub-function will get a user_name as a argument
         and will return a user_id of this user_name
@@ -272,20 +270,19 @@ def login() -> None:
         if choice == 'y':
             create_account()
             os.system(CLEAR_SCREEN)
-            return None
+            return
         elif choice == 'r':
             user_name = input("\nEnter your user name again: ")
         else:
-            return None
+            return
     
     user_id = get_user_id(user_name)
-
     password_check = user['users'][user_id]['password']
     password = g.getpass("Password(It will be invisible) or press (F) and enter if forget password: ")
     
     if password in ['f', 'F']:
         show_password(user_name, password_check)
-        return None
+        return
 
     count = 3
     while password_check != password:
@@ -306,7 +303,6 @@ def login() -> None:
             print(f"\nWRONG!\nYou have 1 try left. Don't get it wrong!")
         
         print("\nPress (F) then enter if forget your password")
-
         password = g.getpass("Please re-enter your password: ")
         if password in ['f', 'F']:
             show_password(user_name, password_check)
@@ -352,7 +348,6 @@ def show_password(user_name: str, password: str) -> None:
     print("*" * 49)
     print(f"The password for account '{user_name}' is: '{password}'")
     print("*" * 10 + "   Press Enter to continue   "+ "*" * 10)
-    
     input()
 
 
@@ -420,10 +415,9 @@ def create_account() -> None:
         "password": password,
         "items":[]
     }
-
     user['users'].append(new_user)
 
-    with open('user.json', 'w') as user_file:
+    with open('user.json', 'w', encoding='utf-8') as user_file:
         json.dump(user, user_file, indent=2)
 
     os.system(CLEAR_SCREEN)
@@ -444,9 +438,7 @@ def create_account() -> None:
                                                                 
                                                           -----     Press Enter to continue to login page     -----
     """)
-
     input()
-    
     os.system(CLEAR_SCREEN)
 
 
@@ -468,7 +460,6 @@ def action() -> None:
     exit_ = False
     while not exit_:
         os.system(CLEAR_SCREEN)
-
         print(r"""
                                                     ██████╗ ██╗   ██╗██████╗ ██████╗  ██████╗ ███████╗███████╗██████╗ 
                                                     ██╔══██╗██║   ██║██╔══██╗██╔══██╗██╔═══██╗██╔════╝██╔════╝╚════██╗
@@ -483,7 +474,6 @@ def action() -> None:
                                                                             (A)dd lending item
                                                                             (N)othing just chilling
         """)
-        
         choice = input("Select your choice: ").lower().strip()
 
         while choice not in ['l', 'r', 'a', 'n']:
@@ -535,7 +525,6 @@ def lending() -> None:
                                                     ███████╗███████╗██║ ╚████║██████╔╝██║██║ ╚████║╚██████╔╝    
                                                     ╚══════╝╚══════╝╚═╝  ╚═══╝╚═════╝ ╚═╝╚═╝  ╚═══╝ ╚═════╝ 
     """)
-    
     want_to_lend = True
     is_item_exist = False
     
@@ -558,9 +547,8 @@ def lending() -> None:
                 if item['id'] == item_id:
                     return count
                 count += 1
-        
-        show_inventory()
 
+        show_inventory()
         print("What do you want to lend?")
 
         while True:
@@ -617,7 +605,7 @@ def lending() -> None:
 
         inventory['items'][item_id-1]['amount'] -= amount
 
-        with open('inventory.json', 'w') as inventory_file:
+        with open('inventory.json', 'w', encoding='utf-8') as inventory_file:
             json.dump(inventory, inventory_file, indent=2)
 
         if is_item_exist:
@@ -644,7 +632,7 @@ def lending() -> None:
 
         user_items[user_item_index].update({'days': days})
 
-        with open('user.json', 'w') as user_file:
+        with open('user.json', 'w', encoding='utf-8') as user_file:
             json.dump(user, user_file, indent=2)
 
         print(r"""
@@ -688,7 +676,7 @@ def lending() -> None:
 
     user['users'][user_id-1].update({"items": user_items})
 
-    with open('user.json', 'w') as user_file:
+    with open('user.json', 'w', encoding='utf-8') as user_file:
         json.dump(user, user_file, indent=2)
 
     print(f"{'|'}\n{'|':<5}{'Sign:':<5}{'Aademics team ✅':<15}")
@@ -819,10 +807,10 @@ def returning() -> None:
                 user['users'][user_id-1]['items'].remove(usr)
                 break
 
-        with open('user.json', 'w') as user_file:
+        with open('user.json', 'w', encoding='utf-8') as user_file:
             json.dump(user, user_file, indent=2)
 
-        with open('inventory.json', 'w') as inventory_file:
+        with open('inventory.json', 'w', encoding='utf-8') as inventory_file:
             json.dump(inventory, inventory_file, indent=2)
 
         input() 
@@ -905,7 +893,7 @@ def add_item() -> None:
 
     inventory['items'].append(new_item)
 
-    with open('inventory.json', 'w') as inventory_file:
+    with open('inventory.json', 'w', encoding='utf-8') as inventory_file:
         json.dump(inventory, inventory_file, indent=2)
 
     print(r"""
